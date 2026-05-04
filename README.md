@@ -5,6 +5,33 @@
 
 ---
 
+## SVG
+
+1. 基于编辑造型或背景的代码注入攻击：  
+    影响范围有限，仅对查看源代码的人有效。  
+    参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
+    漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
+
+2. 基于 iframe + svg 的代码注入攻击：  
+    ⚡立即中招，几乎没有反应时间。  
+    如果在浏览器里直接用一个标签页打开 svg ，浏览器会执行 svg 里的 JS 脚本。同理，在没有保护措施的 iframe 里加载 svg 也会立即执行脚本。  
+    已知登录 www.ccw.site 时的 Set-Cookie 响应头是这样的
+    ```
+    Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.site; Max-Age=2592000; Expires=Tue, 02 Jun 2026 12:57:16 GMT; HttpOnly
+    ```
+    因此，在 m.ccw.site 加载的 svg 里执行的脚本可以携带有效的 token 请求 CCW 接口。  
+    设想的场景：  
+    黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
+    这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
+
+    <img width="2234" height="1304" alt="Image" src="https://github.com/user-attachments/assets/a4777792-ae52-4e1e-a44d-d5e5756f5571" />
+
+    <img width="1116" height="651" alt="Image" src="https://github.com/user-attachments/assets/06c37f3e-3c94-4fbc-ad86-1e266ec7a49c" />
+
+    <img width="1116" height="651" alt="Image" src="https://github.com/user-attachments/assets/299c38c1-4b46-4fdb-a3d0-18faa5da136e" />
+
+---
+
 ## CCWData
 
 扩展显示名称：Gandi云数据
@@ -175,6 +202,8 @@ toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3
 对应的，在创作者学院的文章里，可以插入 iframe ，而 iframe 能立即访问 creator 或 gandi ，形成了漏洞链，用户仅需点开文章，就会暴露在风险之中。  
 
 当然了，创作页执行上述操作，并不需要使用第三方扩展，只需要使用 CCWData 的代码注入漏洞，配合 “当计时器 > -1” 的帽子，就可以在浏览器访问链接后立即执行任意代码。
+
+（iframe + Gandi 加载太慢了，不如用 iframe + svg）
 
 ---
 
