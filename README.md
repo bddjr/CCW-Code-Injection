@@ -9,40 +9,40 @@
 
 ## SVG
 
-1. 基于 Scratch 编辑器编辑造型的代码注入攻击：  
-    参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
-    漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
+### 基于 Scratch 编辑器编辑造型的代码注入攻击：  
+参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
+漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
 
-2. 基于 iframe + svg 的代码注入攻击：  
-    ⚡立即中招，几乎没有反应时间。  
-    如果在浏览器里直接用一个标签页打开 svg ，浏览器会执行 svg 里的 JS 脚本。同理，在没有保护措施的 iframe 里加载 svg 也会立即执行脚本。  
-    漏洞演示：https://m.ccw.site/user_projects_assets/a8039314e7b97ea48e176b34090b680e.svg  
-    已知登录 www.ccw.site 时的 Set-Cookie 响应头是这样的
-    ```
-    Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.site; Max-Age=2592000; Expires=Tue, 02 Jun 2026 12:57:16 GMT; HttpOnly
-    ```
-    因此，在 m.ccw.site 加载的 svg 里执行的脚本可以携带有效的 token 请求 CCW 接口。  
-    设想的场景：  
-    黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
-    这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
+### 基于 iframe + svg 的代码注入攻击：  
+⚡立即中招，几乎没有反应时间。  
+如果在浏览器里直接用一个标签页打开 svg ，浏览器会执行 svg 里的 JS 脚本。同理，在没有保护措施的 iframe 里加载 svg 也会立即执行脚本。  
+漏洞演示：https://m.ccw.site/user_projects_assets/a8039314e7b97ea48e176b34090b680e.svg  
+已知登录 www.ccw.site 时的 Set-Cookie 响应头是这样的
+```
+Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.site; Max-Age=2592000; Expires=Tue, 02 Jun 2026 12:57:16 GMT; HttpOnly
+```
+因此，在 m.ccw.site 加载的 svg 里执行的脚本可以携带有效的 token 请求 CCW 接口。  
+设想的场景：  
+黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
+这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
 
-    ![0](./img/0.png)
+![0](./img/0.png)
 
-    ![1](./img/1.png)
+![1](./img/1.png)
 
-    ![2](./img/2.png)
+![2](./img/2.png)
 
-    > [!TIP]  
-    > 建议根据按照以下步骤操作，增强安全性：
-    >
-    >  - 如果您使用 Google Chrome 浏览器：  
-    >    访问 https://m.ccw.site ，然后点击网址左侧的按钮，然后点击“网站设置”，然后将“JavaScript”权限改为“阻止”。  
-    >
-    >  - 如果您使用 Microsoft Edge 浏览器：  
-    >    访问 https://m.ccw.site ，然后点击网址左侧的🔒按钮，然后点击“此网站的权限”，然后将“JavaScript”权限改为“阻止”。  
-    >
-    >  - 如果您使用 Mozilla Firefox 浏览器：  
-    >    无法禁用网站的 JavaScript 权限，建议更换浏览器。  
+> [!TIP]  
+> 建议根据按照以下步骤操作，增强安全性：
+>
+>  - 如果您使用 Google Chrome 浏览器：  
+>    访问 https://m.ccw.site ，然后点击网址左侧的按钮，然后点击“网站设置”，然后将“JavaScript”权限改为“阻止”。  
+>
+>  - 如果您使用 Microsoft Edge 浏览器：  
+>    访问 https://m.ccw.site ，然后点击网址左侧的🔒按钮，然后点击“此网站的权限”，然后将“JavaScript”权限改为“阻止”。  
+>
+>  - 如果您使用 Mozilla Firefox 浏览器：  
+>    无法禁用网站的 JavaScript 权限，建议更换浏览器。  
 
 ---
 
