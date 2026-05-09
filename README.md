@@ -1,5 +1,7 @@
 记录共创世界的前端代码注入漏洞和盗号接口。
 
+建议使用 [CCW-Code-Injection-Risk-Warning](https://github.com/bddjr/CCW-Code-Injection-Risk-Warning) 防御部分漏洞。  
+
 > [!WARNING]  
 > **仅供学习研究用途，请勿编写恶意代码，违者后果自负！**  
 
@@ -7,14 +9,14 @@
 
 ## SVG
 
-1. 基于编辑造型或背景的代码注入攻击：  
-    影响范围有限，仅对查看源代码的人有效。  
+1. 基于 Scratch 编辑器编辑造型的代码注入攻击：  
     参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
     漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
 
 2. 基于 iframe + svg 的代码注入攻击：  
     ⚡立即中招，几乎没有反应时间。  
     如果在浏览器里直接用一个标签页打开 svg ，浏览器会执行 svg 里的 JS 脚本。同理，在没有保护措施的 iframe 里加载 svg 也会立即执行脚本。  
+    漏洞演示：https://m.ccw.site/user_projects_assets/a8039314e7b97ea48e176b34090b680e.svg  
     已知登录 www.ccw.site 时的 Set-Cookie 响应头是这样的
     ```
     Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.site; Max-Age=2592000; Expires=Tue, 02 Jun 2026 12:57:16 GMT; HttpOnly
@@ -24,11 +26,23 @@
     黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
     这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
 
-    <img width="2234" height="1304" alt="Image" src="https://github.com/user-attachments/assets/a4777792-ae52-4e1e-a44d-d5e5756f5571" />
+    ![0](./img/0.png)
 
-    <img width="1116" height="651" alt="Image" src="https://github.com/user-attachments/assets/06c37f3e-3c94-4fbc-ad86-1e266ec7a49c" />
+    ![1](./img/1.png)
 
-    <img width="1116" height="651" alt="Image" src="https://github.com/user-attachments/assets/299c38c1-4b46-4fdb-a3d0-18faa5da136e" />
+    ![2](./img/2.png)
+
+    > [!TIP]  
+    > 建议根据按照以下步骤操作，增强安全性：
+    >
+    >  - 如果您使用 Google Chrome 浏览器：  
+    >    访问 https://m.ccw.site ，然后点击网址左侧的按钮，然后点击“网站设置”，然后将“JavaScript”权限改为“阻止”。  
+    >
+    >  - 如果您使用 Microsoft Edge 浏览器：  
+    >    访问 https://m.ccw.site ，然后点击网址左侧的🔒按钮，然后点击“此网站的权限”，然后将“JavaScript”权限改为“阻止”。  
+    >
+    >  - 如果您使用 Mozilla Firefox 浏览器：  
+    >    无法禁用网站的 JavaScript 权限，建议更换浏览器。  
 
 ---
 
@@ -234,3 +248,14 @@ POST https://sso.ccw.site/web/auth/login-by-password
 攻击者只能在用户登录的时候获取它，而且只能获取当前会话的 token 。  
 
 但既然用户都在这时候登录了，当然可以直接获取用户输入的密码，所以该漏洞的影响有限，仅对于不使用密码登录的人来说会增加风险。  
+
+---
+
+## 盗取浏览器自动填充的账号密码
+
+攻击者成功注入恶意代码之后，可以盗取浏览器自动填充的账号密码，即使网页未显示输入框。  
+
+> [!TIP]  
+> 建议禁用浏览器的自动填充密码，或者改为“在查看或填写网站密码之前提示设备登录选项。始终征求许可”  
+> 
+> ![3](./img/3.png)  
