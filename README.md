@@ -44,6 +44,11 @@ Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.
 >  - 如果您使用 Mozilla Firefox 浏览器：  
 >    无法禁用网站的 JavaScript 权限，建议更换浏览器。  
 
+如果 CCW 官方需要防止浏览器访问 m.ccw.site 的时候执行脚本，只需要添加以下响应头，阻止执行任何脚本：  
+```
+Content-Security-Policy: script-src 'none';
+```
+
 ---
 
 ## CCWData
