@@ -1,6 +1,6 @@
 记录共创世界的前端代码注入漏洞和可能的盗号方式。
 
-更新时间：北京时间 2026 年 5 月 10 日 20:29
+更新时间：北京时间 2026 年 5 月 10 日 20:46
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -363,6 +363,9 @@ POST https://sso.ccw.site/web/auth/login-by-password
 - [为什么你的密码会被恶意扩展窃取？](https://learn.ccw.site/article/87737a20-a45d-4d41-b950-1af19dbc1ae7)  
   [往昔余庆](https://www.ccw.site/student/5db279a4483f207ab58b3929) 2026-05-08 02:28  
 
+- [Every version of Scratch is vulnerable to arbitrary code execution](https://muffin.ink/blog/scratch-vulnerability-disclosure/)  
+  [muffin.ink](https://muffin.ink) 2026-04-23  
+
 - [【社区公告】关于“账号安全”的通知](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef)  
   [共创世界产品汪](https://www.ccw.site/student/6008f86de6894d53dd63749f) 2026-04-13 19:20  
 
@@ -371,3 +374,4 @@ POST https://sso.ccw.site/web/auth/login-by-password
 
 - [[重要通告]保护账号安全，做对这几件事...](https://learn.ccw.site/article/6af308a5-cb78-465c-bb1e-572c48f0fc5e)  
   [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 2025-12-08 17:09  
+
