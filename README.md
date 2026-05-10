@@ -1,6 +1,6 @@
 记录共创世界的前端代码注入漏洞和可能的盗号方式。
 
-更新时间：北京时间 2026 年 5 月 10 日 21:36
+更新时间：北京时间 2026 年 5 月 10 日 21:46
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -112,7 +112,7 @@ Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.
 ![2](./img/2.png)
 
 > [!TIP]  
-> 建议根据按照以下步骤操作，增强安全性：
+> 建议根据按照以下步骤操作，禁止 m.ccw.site 运行 JavaScript ，以增强安全性：
 >
 >  - 如果您使用 Google Chrome 浏览器：  
 >    访问 https://m.ccw.site ，然后点击网址左侧的按钮，然后点击“网站设置”，然后将“JavaScript”权限改为“阻止”。  
@@ -121,7 +121,7 @@ Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.
 >    访问 https://m.ccw.site ，然后点击网址左侧的🔒按钮，然后点击“此网站的权限”，然后将“JavaScript”权限改为“阻止”。  
 >
 >  - 如果您使用 Mozilla Firefox 浏览器：  
->    无法禁用网站的 JavaScript 权限，建议更换浏览器。  
+>    详见 https://support.mozilla.org/zh-CN/kb/javascript-settings-for-interactive-web-pages  
 
 如果 CCW 官方需要防止浏览器访问 m.ccw.site 的时候执行脚本，只需要添加以下响应头，阻止执行任何脚本：  
 ```
