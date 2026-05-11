@@ -1,6 +1,8 @@
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月11日 18:13
+更新时间：北京时间 2026年5月11日 18:33
+
+点击右上角的 <img src="img/10.png" height="30"> 查看目录。  
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -135,17 +137,14 @@ Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.
 因此，在 m.ccw.site 加载的 svg 里执行的脚本可以携带有效的 token 请求 CCW 接口。  
 设想的场景：  
 黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
-这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
 
-<details><summary>查看截图</summary>
+**这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。**  
 
 ![0](./img/0.png)
 
 ![1](./img/1.png)
 
 ![2](./img/2.png)
-
-</details><br/>
 
 > [!TIP]  
 > 建议根据按照以下步骤操作，禁止 m.ccw.site 运行 JavaScript ，以增强安全性：
