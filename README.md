@@ -1,13 +1,15 @@
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月11日 18:33
-
-点击右上角的 <img src="img/10.png" height="30"> 查看目录。  
+更新时间：北京时间 2026年5月11日 18:38
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
 >
 > **For learning and research purposes only. Do not use for cyber attacks. Offenders will bear all the consequences!!!**
+
+> [!TIP]  
+> ↓ 如图所示，点击右上角的这个按钮查看目录  
+> <img src="img/10.png" height="30">  
 
 > [!TIP]  
 > 建议使用 [CCW-Code-Injection-Risk-Warning](https://github.com/bddjr/CCW-Code-Injection-Risk-Warning) 防御部分漏洞。  
