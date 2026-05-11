@@ -1,6 +1,6 @@
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月11日 15:18
+更新时间：北京时间 2026年5月11日 18:00
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -85,13 +85,31 @@ await new Promise((resolve, reject) => {
 > ![3](./img/3.png)  
 
 > [!NOTE]  
-> 已知该漏洞被 “不想上学” 利用过，以下证据截图自 [文章](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef) 的评论区和 “不想上学” 发的链接。  
-> 事后，“不想上学” 使用的 [账号](https://www.ccw.site/student/6700b4333feba73009833eb5) 被封禁，已于2026年5月11日下午解除封禁。  
-> 暂不清楚该账号是否属于 “不想上学” 。  
+> 已知该漏洞被 “不想上学” 利用过。  
+> 部分账号疑似被 “不想上学” 盗取，并被用于发布评论和恶意扩展，已知包括：
+> 
+> - [沙雕的初小白](https://www.ccw.site/student/6700b4333feba73009833eb5)  
+>   共创世界 ID 265003222  
+>   处罚：已被封禁，然后于2026年5月11日15时左右解除封禁，随后的 3 个小时内再次被封禁。  
+>   解封时间：2026年5月18日 17:10:52  
+> 
+> - [生气的Charles0](https://www.ccw.site/student/66b75da6aa7ba3081f3f839f)  
+>   共创世界 ID 263014899  
+>   处罚：已被封禁  
+>   解封时间：2029年1月28日 23:44:21
+> 
+> <details><summary>查看截图</summary>
+> 
+> 以下证据截图自 [文章](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef) 的评论区和 “不想上学” 发的链接。  
 > 
 > ![6](img/6.png)  
+> ![7](img/7.png)  
 >
-> ![7](img/7.png)
+> 以下评论截图自 [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 的主页评论区。  
+>
+> ![8](img/8.png)  
+> ![9](img/9.png)  
+> </details>
 
 ---
 
@@ -120,11 +138,15 @@ Set-Cookie: token=XXXXXXXXXXXXXXXX60816ba55659e776ec2d3be9; Path=/; Domain=.ccw.
 黑客在 learn.ccw.site 使用 iframe 嵌入来自 m.ccw.site 的 svg ，然后这个 svg 里有恶意代码，并且会伪装，表面上看这好像就是个 iframe 在显示b站的视频，背后其实已经把浏览器自动填充的密码、手机号、实名认证的姓名、身份证前两位和后两位等信息打包并发送到黑客的服务器了。  
 这比加载 Gandi IDE 再执行恶意脚本还要快很多很多倍，受害者根本来不及反应。  
 
+<details><summary>查看截图</summary>
+
 ![0](./img/0.png)
 
 ![1](./img/1.png)
 
 ![2](./img/2.png)
+
+</details><br/>
 
 > [!TIP]  
 > 建议根据按照以下步骤操作，禁止 m.ccw.site 运行 JavaScript ，以增强安全性：
@@ -439,9 +461,13 @@ CSense（自称“安全审计工具”的外挂脚本）的作者 [熊谷·凌(
 > 官方是有多心虚才会跑来我的评论区删我的评论？  
 > 搞得好像只要忽悠用户就能解决问题似的。  
 >
+> <details><summary>查看截图</summary>
+> 
 > ![5](img/5.png)  
 > 
 > ![4](img/4.png)  
+>
+> </details>
 
 ---
 
