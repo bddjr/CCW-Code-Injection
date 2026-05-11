@@ -1,6 +1,6 @@
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026 年 5 月 10 日 21:51
+更新时间：北京时间 2026年5月11日 13:10
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -89,10 +89,16 @@ await new Promise((resolve, reject) => {
 ## SVG
 
 ### 基于 Scratch 编辑器编辑造型的代码注入攻击：  
+
+状态：⚠️未修复  
+
 参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
 漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
 
 ### 基于 iframe + svg 的代码注入攻击：  
+
+状态：⚠️未修复
+
 ⚡立即中招，几乎没有反应时间。  
 如果在浏览器里直接用一个标签页打开 svg ，浏览器会执行 svg 里的 JS 脚本。同理，在没有保护措施的 iframe 里加载 svg 也会立即执行脚本。  
 漏洞演示：https://m.ccw.site/user_projects_assets/a8039314e7b97ea48e176b34090b680e.svg  
@@ -131,6 +137,8 @@ Content-Security-Policy: script-src 'none';
 ---
 
 ## CCWData
+
+状态：⚠️未修复  
 
 扩展显示名称：Gandi云数据
 
@@ -338,7 +346,71 @@ toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3
 
 ---
 
+## 创作者学院的iframe
+
+状态：⚠️未修复  
+
+您可能已经注意到，上述的部分攻击形式可以借助创作者学院嵌入iframe，形成漏洞链，受害者在已登录的状态下，点击文章就会中招。  
+
+这其中有两种形式：
+
+- 基于 `www.ccw.site/gandi` 或 `www.ccw.site/creator`  
+  这是比较常见的方式，缺点是需要等待加载编辑器完成才会执行恶意代码，给受害者几秒钟的反应时间。  
+
+- 基于 m.ccw.site 加载 SVG  
+  只要 SVG 加载成功，恶意代码就会立即执行，受害者几乎没有反应时间。  
+
+创作者学院的前端编辑器并不能直接插入任意站点，例如尝试插入 `https://example.com` ，它会提示：暂时只支持bilibili和西瓜视频以及站内链接  
+
+查找并分析js文件  
+https://learn.ccw.site/_next/static/chunks/708-9a7dbfbb32eca7d3.js  
+https://learn.ccw.site/_next/static/chunks/5191-e0df96b8928838d4.js  
+https://learn.ccw.site/_next/static/chunks/app/(normal)/home/layout-a9cb46b1ff2d4762.js  
+
+创作者学院前端支持插入的 URL origin ：  
+
+```js
+[
+  // 境内不能直连的
+  "https://scratch.mit.edu",
+  "https://youtube.com", // 重定向到 www.youtube.com
+  "https://www.facebook.com",
+  "https://www.twitch.tv",
+  "https://twitter.com", // 重定向到 x.com
+
+  // 已无 DNS 解析
+  "https://qa.cocrea.world",
+
+  // 西瓜视频已改名为抖音精选，以下旧域名会重定向到 www.douyin.com/jingxuan
+  // 目前为止没看到有人嵌入这个网站的视频
+  "https://www.ixigua.com",
+  "https://ixigua.com",
+
+  // bilibili
+  "https://bilibili.com",
+  "https://player.bilibili.com",
+  "https://www.bilibili.com",
+
+  // CCW
+  "https://www.ccw.site",
+  "https://ccw.site",
+  "https://learn.ccw.site",
+  "https://learn-qa.xiguacity.cn" // 已无 DNS 解析
+]
+```
+
+或者 origin 包含 "ccw.site" 或 "xiguacity.cn" 。  
+
+仅在编辑器里插入的时候会校验，但查看文章的时候加载iframe前不会校验。  
+我不知道服务器会不会校验。  
+
+幸运的是，在创作者学院发布这种含有恶意 iframe 的文章，如果造成了恐慌，文章可能会在一天之内被下架。  
+
+---
+
 ## list_sessions接口
+
+状态：✅已修复  
 
 ```
 POST https://community-web.ccw.site/students/list_sessions?page=1&perPage=20&sortField=createdAt&sortType=DESC
@@ -347,14 +419,26 @@ POST https://community-web.ccw.site/students/list_sessions?page=1&perPage=20&sor
 这个接口的漏洞十分明显，攻击者只需要知道如何借助心跳接口获取 HmacMD5 的 key ，就可以搞定 A 请求头和 B 请求头，然后请求这个接口，获取当前用户的 token ，从而盗号。  
 配合代码注入漏洞，形成漏洞攻击链。
 
-CSense 的作者曾多次强调 CSense 无法盗取用户的密码，却隐瞒了这一事实。  
+CSense（自称“安全审计工具”的外挂脚本）的作者 [熊谷·凌(FurryR)](https://github.com/FurryR) 曾多次强调 CSense 无法盗取用户的密码，却隐瞒了这一事实。  
 早期 CSense 利用该漏洞，将 CSense 使用者的登录信息和 token 发送给 CSense 的作者。
 
 该漏洞在 2026 年 1 月 16 日 被修复，攻击者不能再借助该接口获取 token ，但仍可以获取登录时的时间、IP地址、浏览器版本，问题不大。
 
+> [!NOTE]  
+> 如图所示。  
+> 这个漏洞已经存在很长时间，如果我不这么催，官方会修吗？  
+> 官方是有多心虚才会跑来我的评论区删我的评论？  
+> 搞得好像只要忽悠用户就能解决问题似的。  
+>
+> ![5](img/5.png)  
+> 
+> ![4](img/4.png)  
+
 ---
 
 ## login接口
+
+状态：⚠️未修复  
 
 ```
 POST https://sso.ccw.site/web/auth/login-by-password
@@ -374,6 +458,8 @@ POST https://sso.ccw.site/web/auth/login-by-password
 POST https://community-web.ccw.site/students/self/detail
 ```
 
+用户在已登录的状态下，每次访问 www.ccw.site 都会请求这个接口。  
+
 攻击者成功注入恶意代码之后，请求该接口可以获取敏感信息，包括但不限于：
 - 该账号绑定的手机号
 - 该账号绑定 QQ 时的 QQ 昵称
@@ -384,6 +470,10 @@ POST https://community-web.ccw.site/students/self/detail
 
 ## 创作者学院的localStorage
 
+创作者学院的文章不能在不借助 iframe 的情况下注入恶意代码，而且 iframe 引用的网址必须跨域，例如跨域到 www.ccw.site 或 m.ccw.site 。
+
+iframe 在跨域的时候可能不能获取 `window.parent` 对象，所以暂不清楚该特性能否被攻击者利用。
+
 创作者学院会在 `localStorage['persist:root']` 里保存最近查看文章时使用的账号的敏感信息，包括但不限于：
 - 该账号绑定的手机号
 - 该账号绑定 QQ 时的 QQ 昵称
@@ -392,34 +482,43 @@ POST https://community-web.ccw.site/students/self/detail
 
 即使用户已经退出登录，这里也会继续保存这些内容。
 
-暂不清楚该特性能否被攻击者利用。
-
 ---
 
 ## 官方的承诺
 
-仅供参考，不予置评。  
+### 节选自《[重要通告]保护账号安全，做对这几件事...》  
 
-以下内容节选自《CCW共创世界隐私政策》  
+> [!NOTE]  
+> 该文章发表时，list_sessions 接口盗 token 的漏洞未修复。
+
+对此，许多肝酱担忧是否因账号被盗导致了信息泄露？结合前文所示，盗号者没有任何渠道能够获取肝酱们的安全信息。
+
+### 节选自《CCW共创世界隐私政策》  
+
+> [!NOTE]  
+> 这话 CCW 官方自己信吗？  
 
 版本更新日期：2021年06月01日  
 本政策生效日期：2021年06月01日  
 
 **五.我们如何存储和保护您的个人信息**  
 （二）个人信息的保护  
-  1. 平台会采取合理可行的措施，尽力避免收集无关的个人信息。平台只会在达成本政策所述目的所需的期限内保留您的个人信息，除非法律有强制的存留要求。在您的个人信息超出保留期间后，平台会根据适用法律的要求删除您的个人信息，或使其匿名化处理。
+1. 平台会采取合理可行的措施，尽力避免收集无关的个人信息。平台只会在达成本政策所述目的所需的期限内保留您的个人信息，除非法律有强制的存留要求。在您的个人信息超出保留期间后，平台会根据适用法律的要求删除您的个人信息，或使其匿名化处理。
 
-  2. 我们已通过了公安部信息安全等级保护三级认证，并与监管机构、第三方测评机构建立了良好的协调沟通机制，及时抵御并处置各类信息安全威胁，为您的信息安全提供全方位保障。
+2. 我们已通过了公安部信息安全等级保护三级认证，并与监管机构、第三方测评机构建立了良好的协调沟通机制，及时抵御并处置各类信息安全威胁，为您的信息安全提供全方位保障。
 
-  3. 平台已制定个人信息安全事件应急预案，定期组织内部相关人员进行应急响应培训和应急演练，使其掌握岗位职责和应急处置策略和规程。
+3. 平台已制定个人信息安全事件应急预案，定期组织内部相关人员进行应急响应培训和应急演练，使其掌握岗位职责和应急处置策略和规程。
 
-  4. 如发生个人信息安全事件后，平台将按照法律法规的要求并最迟不迟于 30 个自然日内向您告知：安全事件的基本情况和可能的影响、平台已采取或将要采取的处置措施、您可自主防范和降低风险的建议、对您的补救措施等。事件相关情况平台将以邮件、信函、电话、推送通知等方式告知您，难以逐一告知个人信息主体时，平台会采取合理、有效的方式发布公告。同时，平台还将按照监管部门要求，上报个人信息安全事件的处置情况。
+4. 如发生个人信息安全事件后，平台将按照法律法规的要求并最迟不迟于 30 个自然日内向您告知：安全事件的基本情况和可能的影响、平台已采取或将要采取的处置措施、您可自主防范和降低风险的建议、对您的补救措施等。事件相关情况平台将以邮件、信函、电话、推送通知等方式告知您，难以逐一告知个人信息主体时，平台会采取合理、有效的方式发布公告。同时，平台还将按照监管部门要求，上报个人信息安全事件的处置情况。
 
-  5. **由于技术的限制以及可能存在的各种恶意手段，在互联网行业，即便竭尽所能加强安全措施，也不可能始终保证信息百分之百的安全，我们将尽力确保您提供给我们的个人信息的安全性。请您知悉并理解，您接入我们的服务所用的系统和通讯网络，有可能因我们可控范围外的因素而出现问题。因此，我们强烈建议您采取积极措施保护个人信息的安全，包括但不限于使用复杂密码、定期修改密码、不将自己的账号密码等个人信息透露给他人。**
+5. **由于技术的限制以及可能存在的各种恶意手段，在互联网行业，即便竭尽所能加强安全措施，也不可能始终保证信息百分之百的安全，我们将尽力确保您提供给我们的个人信息的安全性。请您知悉并理解，您接入我们的服务所用的系统和通讯网络，有可能因我们可控范围外的因素而出现问题。因此，我们强烈建议您采取积极措施保护个人信息的安全，包括但不限于使用复杂密码、定期修改密码、不将自己的账号密码等个人信息透露给他人。**
 
 ---
 
 ## 相关文章
+
+- [CCW 社区安全 Q&A](https://learn.ccw.site/article/51501436-87d5-4d4b-976e-2d00bbc50e9a)  
+  [Chen-Jin](https://www.ccw.site/student/692538ef86bbc77f84e3b259) 2026-05-10 02:45  
 
 - [为什么你的密码会被恶意扩展窃取？](https://learn.ccw.site/article/87737a20-a45d-4d41-b950-1af19dbc1ae7)  
   [往昔余庆](https://www.ccw.site/student/5db279a4483f207ab58b3929) 2026-05-08 02:28  
@@ -433,6 +532,8 @@ POST https://community-web.ccw.site/students/self/detail
 - [恶意扩展如何让你上钩？远远不止这些……](https://learn.ccw.site/article/5f06747c-fae9-4ed6-b69e-24016eedbfd3)  
   [浅_酱_](https://www.ccw.site/student/63d8837e6bc82a13fb855f0a) 2026-04-11 22:21  
 
+- [Gandi内置的扩展有潜在使用eval函数执行任意js脚本的风险](https://learn.ccw.site/article/7d25e249-458a-4016-956f-d49cb315ca54)  
+  [无心小白僵尸](https://www.ccw.site/student/66366121a7113d4ff035cd9c) 2026-02-23 12:33  
+
 - [[重要通告]保护账号安全，做对这几件事...](https://learn.ccw.site/article/6af308a5-cb78-465c-bb1e-572c48f0fc5e)  
   [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 2025-12-08 17:09  
-
