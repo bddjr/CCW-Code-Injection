@@ -2,7 +2,7 @@
 
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月11日 20:25
+更新时间：北京时间 2026年5月15日 12:54
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -121,6 +121,11 @@ await new Promise((resolve, reject) => {
 > ![8](img/8.png)  
 > ![9](img/9.png)  
 
+> [!NOTE]  
+> 官方回复：  
+>
+> ![10](img/10.png)  
+
 ---
 
 ## SVG
@@ -189,6 +194,8 @@ Content-Security-Policy: script-src 'none';
 如果您想看旧版逻辑，请看 [before-20260309.md](before-20260309.md) 。
 
 参考逆向代码文件 [20260309.scratch3_ccw_data.e7237e1f.prettyprint.js](20260309.scratch3_ccw_data.e7237e1f.prettyprint.js) 。
+
+修复方法参考 [CCWData-Code-Injection-Fix](https://github.com/bddjr/CCWData-Code-Injection-Fix) 。  
 
 ### getValueInJSON
 
@@ -348,6 +355,12 @@ toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3
 ```
 
 从 2026 年 3 月 9 日 起，此处的漏洞和 `getValueInJSON` 的漏洞一致。
+
+---
+
+## BBcode
+
+该扩展疑似有代码注入漏洞，暂未确认，此处等待补充……
 
 ---
 
