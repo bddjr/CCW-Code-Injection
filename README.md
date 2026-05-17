@@ -2,7 +2,7 @@
 
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月17日 13:11
+更新时间：北京时间 2026年5月17日 13:51
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -413,6 +413,19 @@ toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3
 https://learn.ccw.site/_next/static/chunks/708-9a7dbfbb32eca7d3.js  
 https://learn.ccw.site/_next/static/chunks/5191-e0df96b8928838d4.js  
 https://learn.ccw.site/_next/static/chunks/app/(normal)/home/layout-a9cb46b1ff2d4762.js  
+
+```js
+var r, c, a = n(23891), i = "2023-07-20 10:30:00", s = "64b8c81969db2747de4502be", o = ["https://scratch.mit.edu", "https://youtube.com", "https://www.facebook.com", "https://www.twitch.tv", "https://twitter.com", "https://qa.cocrea.world", "https://www.ixigua.com", "https://ixigua.com", "https://bilibili.com", "https://player.bilibili.com", "https://www.bilibili.com", "https://www.ccw.site", "https://ccw.site", "https://learn.ccw.site", "https://learn-qa.xiguacity.cn"], u = function(t) {
+    try {
+        var e = new URL(t).origin;
+        if (o.includes(e) || e.includes("ccw.site") || e.includes("xiguacity.cn"))
+            return !0;
+        return !1
+    } catch (t) {
+        return !1
+    }
+}
+```
 
 创作者学院前端支持插入的 URL origin ：  
 
