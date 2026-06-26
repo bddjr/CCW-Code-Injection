@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年6月26日 18:14
+更新时间：北京时间 2026年6月26日 18:36
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -110,6 +110,18 @@
 
 攻击者成功在受害者的环境注入恶意代码后，会将个人资料的“学校”字段修改成很长的字符串（长达5M），导致用户个人设置的个人资料时，页面无响应（卡死），用户难以使用常规路径修改自己的昵称和密码。
 
+不过，受害者可以按照 [“账号被黑了怎么办？”](#账号被黑了怎么办) 的提示操作，以解决个人资料页面卡死的问题。
+
+---
+
+## 钓鱼登录页面
+
+攻击者成功注入恶意代码后，可能会创建一个登录页面，诱导用户输入账号密码，而恶意代码会悄悄地监视输入框，盗取密码。  
+
+用户需提高反诈骗意识，不要在查看作品或编辑作品的页面输入CCW账号密码，也不要在域名不是 www.ccw.site 的钓鱼网站输入CCW账号密码。  
+
+如果需要登录，请在新标签页访问CCW首页 https://www.ccw.site ，或者在新标签页访问CCW登录页 https://www.ccw.site/login 。
+
 ---
 
 ## 自动填充账号密码
@@ -127,7 +139,8 @@
 网站可以采取的防护措施：  
 如果CCW网站登录支持2FA，像Github和npm那样的2FA，并且2FA也防暴力破解，应该会大大增加盗号难度。  
 只要用户设置了2FA，攻击者即使盗到密码也不能直接在攻击者自己的设备上登录，那么攻击者即使盗了密码也没用，攻击行为只能发生在用户未关闭网页的情况下，用户只要关闭网页，攻击者就没办法继续攻击了。  
-这虽然防不了钓鱼的登陆界面，但至少可以防止在完全不知情的情况下被盗取浏览器自动填充的密码。
+这虽然防不了钓鱼的登陆界面，但至少可以防止在完全不知情的情况下被盗取浏览器自动填充的密码。  
+遗憾的是，截至本文更新时间，CCW还是没有2FA功能。  
 
 > [!TIP]  
 > 建议禁用浏览器的自动填充密码，或者改为 “在查看或填写网站密码之前提示设备登录选项。始终征求许可”  
@@ -263,44 +276,6 @@ Content-Security-Policy: script-src 'none'
 
 ---
 
-## CCWData
-
-状态：✅已修复  
-
-Gandi云数据扩展 (CCWData) 已于北京时间 2026年5月21日 16:50:39 修复前端代码注入漏洞。
-
-参考js文件 [20260521.scratch3_ccw_data.9ff72c43.prettyprint.js](20260521.scratch3_ccw_data.9ff72c43.prettyprint.js)
-
-[查看旧版逻辑](./ccwdata-before-20260521-165039.md)  
-
-修复后，相关积木会直接调用新版的积木。相关代码如下  
-
-```js
-{
-    key: "getValueInJSON",
-    value: function(t) {
-        this.doNotLogError = !0;
-        var e = this.getValueInJSON_2(t);
-        return this.doNotLogError = !1,
-        e
-    }
-}
-```
-
-```js
-{
-    key: "setValueInJSON",
-    value: function(t) {
-        this.doNotLogError = !0;
-        var e = this.setValueInJSON_2(t);
-        return this.doNotLogError = !1,
-        e
-    }
-}
-```
-
----
-
 ## 未上架到“Gandi扩展库”的扩展
 
 未上架到“Gandi扩展库”的扩展就是第三方的脚本，它并没有运行在沙盒环境里，因此漏洞是十分明显的。
@@ -408,6 +383,44 @@ var r, c, a = n(23891), i = "2023-07-20 10:30:00", s = "64b8c81969db2747de4502be
 我不知道服务器会不会校验。  
 
 幸运的是，在创作者学院发布这种含有恶意 iframe 的文章，如果造成了恐慌，文章可能会在一天之内被下架。  
+
+---
+
+## CCWData
+
+状态：✅已修复  
+
+Gandi云数据扩展 (CCWData) 已于北京时间 2026年5月21日 16:50:39 修复前端代码注入漏洞。
+
+参考js文件 [20260521.scratch3_ccw_data.9ff72c43.prettyprint.js](20260521.scratch3_ccw_data.9ff72c43.prettyprint.js)
+
+[查看旧版逻辑](./ccwdata-before-20260521-165039.md)  
+
+修复后，相关积木会直接调用新版的积木。相关代码如下  
+
+```js
+{
+    key: "getValueInJSON",
+    value: function(t) {
+        this.doNotLogError = !0;
+        var e = this.getValueInJSON_2(t);
+        return this.doNotLogError = !1,
+        e
+    }
+}
+```
+
+```js
+{
+    key: "setValueInJSON",
+    value: function(t) {
+        this.doNotLogError = !0;
+        var e = this.setValueInJSON_2(t);
+        return this.doNotLogError = !1,
+        e
+    }
+}
+```
 
 ---
 
