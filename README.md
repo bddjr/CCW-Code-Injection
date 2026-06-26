@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年6月26日 10:56
+更新时间：北京时间 2026年6月26日 11:22
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -473,9 +473,6 @@ Application error: a client-side exception has occurred (see the browser console
 即使账号已封禁，该打分评论仍未删除，仍会导致页面无法正常显示。  
 
 受影响的页面例如 https://assets.ccw.site/extension/csb3.2
-
-> [!TIP]  
-> 建议使用 [CCW-assets-anti-evil-review-comment](https://github.com/bddjr/CCW-assets-anti-evil-review-comment) 解决该问题。
 
 ---
 
