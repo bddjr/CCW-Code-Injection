@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年6月26日 17:23
+更新时间：北京时间 2026年6月26日 18:14
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -572,6 +572,9 @@ Application error: a client-side exception has occurred (see the browser console
 
 - [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/6839840e-aa50-47d4-8028-ae932bddfee7)  
   [孟夫子驾到](https://www.ccw.site/student/63c2807d669fa967f17f5559) 2026-06-25 08:17
+
+- [不想上学5月炸账号，6月炸编辑器😡](https://learn.ccw.site/article/f0ced395-b861-46aa-b1f1-e106af09340f)  
+  [离离原上谱](https://www.ccw.site/student/68820f8f0fffab5209c5a665) 2026-06-24 14:46
 
 - [【功能上新】安全通告](https://learn.ccw.site/article/3e7e506e-7688-4de6-a87d-64e4c31fcd85)  
   [共创世界产品汪](https://www.ccw.site/student/6008f86de6894d53dd63749f) 2026-06-17 15:37
