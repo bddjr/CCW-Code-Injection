@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年6月26日 15:52
+更新时间：北京时间 2026年6月26日 16:03
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -92,7 +92,7 @@
 
 参考文章：
 - [ccw扩展覆写事件分析，此漏洞其实早就被发现了？](https://learn.ccw.site/article/77be3d26-dbf6-4d82-b323-5fc06033c600)
-- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/home/6839840e-aa50-47d4-8028-ae932bddfee7)
+- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/6839840e-aa50-47d4-8028-ae932bddfee7)
 
 存储桶网址: https://zhishi.oss-cn-beijing.aliyuncs.com
 
@@ -565,7 +565,10 @@ Application error: a client-side exception has occurred (see the browser console
 
 ## 相关文章
 
-- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/home/6839840e-aa50-47d4-8028-ae932bddfee7)  
+- [账号被黑了怎么办？别慌，我教你](https://learn.ccw.site/article/d856bd13-0dec-412e-b6a9-ecf329f968f3)  
+  [可可爱爱没有脑袋](https://www.ccw.site/student/6999b7dbfc898317568f6bb2) 2026-06-26 15:06
+
+- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/6839840e-aa50-47d4-8028-ae932bddfee7)  
   [孟夫子驾到](https://www.ccw.site/student/63c2807d669fa967f17f5559) 2026-06-25 08:17
 
 - [【功能上新】安全通告](https://learn.ccw.site/article/3e7e506e-7688-4de6-a87d-64e4c31fcd85)  
