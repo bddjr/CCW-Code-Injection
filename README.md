@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月12日 12:23
+更新时间：北京时间 2026年7月12日 21:19
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -66,45 +66,16 @@
 9. 清除浏览器缓存文件。
 10. 使用 [QQ](https://im.qq.com/) 联系共创世界管理员（3026904139）申诉，说明你的账号被黑客入侵，并将账号id告诉他，并且说明你已修改密码。
 
+
 ---
 
-## 阿里云OSS存储桶文件覆盖漏洞
+## 零点击盗号漏洞
 
-状态：✅已修复
+利用很久未更新的鉴权api进行的零点击盗号漏洞，可直接获取token且无任何通知。
 
-共创世界官方没有控制好OSS存储桶的权限，导致攻击者可以利用该漏洞，将已有文件覆盖成新的文件，造成严重的后果。
+详情未知。
 
-已知攻击者已经利用该漏洞覆盖以下内容
-
-- 素材集市的扩展
-- 用户头像
-- 文章封面
-- 创作者学院图标
-
-其中 “素材集市的扩展” 对用户造成的影响最大，扩展被替换成恶意代码，让本该可以信任的扩展变得不可信，导致更多用户中招。
-
-已知该漏洞于 2025年9月21日 被 [孟夫子驾到](https://www.ccw.site/student/63c2807d669fa967f17f5559) 发现并反馈给官方，然而官方不把这当回事。
-
-直到 2026年4月19日 ，攻击者 “不想上学” 成功破解了阿里云OSS存储桶的前端签名机制，并于2026年5月开始利用该漏洞。  
-
-随后，2026年5月31日凌晨，官方紧急启用了OSS覆写保护，修复了该漏洞。
-
-然而，因为OSS覆写保护影响了西瓜创客的业务，所以官方再次关闭该功能，导致漏洞再次出现。
-
-于是，攻击者再次利用该漏洞发起攻击。
-
-又因为漏洞的影响实在太大，官方再次修复该漏洞。
-
-参考文章：
-- [ccw扩展覆写事件分析，此漏洞其实早就被发现了？](https://learn.ccw.site/article/77be3d26-dbf6-4d82-b323-5fc06033c600)
-- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/6839840e-aa50-47d4-8028-ae932bddfee7)
-- [【公告通知】近期扩展替换事件说明](https://learn.ccw.site/article/0173b23d-139d-4c48-ad98-0aa17b5d3b60)  
-
-存储桶网址: https://zhishi.oss-cn-beijing.aliyuncs.com
-
-加载存储桶的文件时使用的CDN网址:
-- https://m.ccw.site
-- https://m.xiguacity.cn
+参考 https://github.com/bddjr/CCW-Code-Injection/issues/2
 
 ---
 
@@ -241,6 +212,49 @@ await new Promise((resolve, reject) => {
 
 ---
 
+## 阿里云OSS存储桶文件覆盖漏洞
+
+状态：✅已修复
+
+共创世界官方没有控制好OSS存储桶的权限，导致攻击者可以利用该漏洞，将已有文件覆盖成任意文件，造成严重的后果。
+
+已知有攻击者利用该漏洞，覆盖以下内容：
+- 素材集市的扩展  
+  对社区造成的影响最大，扩展被替换成恶意代码，让本该可以信任的扩展变得不可信，导致更多用户中招。  
+- 作品文件  
+  曾被用于在 cave.io 中插入 console.log 代码。  
+- 用户头像
+- 创作者学院文章封面
+- 创作者学院图标
+
+已知该漏洞于 2025年9月21日 被 “孟夫子驾到” 发现并反馈给官方，然而官方不把这当回事。
+
+直到 2026年4月19日 ，攻击者 “不想上学” 成功破解了阿里云OSS存储桶的前端签名机制，并于2026年5月开始利用该漏洞。  
+
+随后，2026年5月31日凌晨，官方紧急启用了OSS覆写保护。
+
+然而，因为OSS覆写保护影响了西瓜创客的业务，所以官方再次关闭该功能，导致漏洞再次出现。
+
+于是，攻击者再次利用该漏洞发起攻击。
+
+又因为漏洞的影响实在太大，官方再次修复该漏洞。
+
+官方已尝试恢复受影响的文件，但目前仍有部分受影响的文件未恢复。
+
+参考：
+- [ccw扩展覆写事件分析，此漏洞其实早就被发现了？](https://learn.ccw.site/article/77be3d26-dbf6-4d82-b323-5fc06033c600)
+- [CCW扩展事件分析(二周目)](https://learn.ccw.site/article/6839840e-aa50-47d4-8028-ae932bddfee7)
+- [【公告通知】近期扩展替换事件说明](https://learn.ccw.site/article/0173b23d-139d-4c48-ad98-0aa17b5d3b60)  
+- [[近期被修复] oss权限控制漏洞使作品可被越权覆写](https://github.com/bddjr/CCW-Code-Injection/issues/4)  
+
+OSS存储桶网址: https://zhishi.oss-cn-beijing.aliyuncs.com
+
+加载存储桶的文件时使用的CDN网址:
+- https://m.ccw.site
+- https://m.xiguacity.cn
+
+---
+
 ## SVG
 
 ### 基于 Scratch 编辑器编辑造型的代码注入攻击：  
@@ -307,19 +321,24 @@ Content-Security-Policy: script-src 'none'
 
 信息来源: [#1](https://github.com/bddjr/CCW-Code-Injection/issues/1)  
 
-### 其它页面
+### embed页面
 
-其它页面例如：
-> creator  
-> gandi  
-> embed
+用户手动点击运行作品后，该页面会立即加载作品，然后自动执行扩展的任意代码，然后自动运行作品，不会弹出扩展警告。
+
+现在该页面已无法运行作品，因此该漏洞被修复。
+
+### 编辑器页面
+
+例如：
+> /creator  
+> /gandi  
 
 以前，这些页面在加载项目的时候会立即加载并执行扩展脚本，不会经过用户同意，因此漏洞仍然明显。
 
-> 攻击者可以利用 creator 或 gandi 会立即加载作品的特性，在加载作品的时候执行第三方扩展脚本。  
+> 攻击者可以利用 /creator 或 /gandi 会立即加载作品的特性，在加载作品的时候执行第三方扩展脚本。  
 > 用户只需要访问创作页的链接，就会将自己的账号暴露在风险之中。  
 > 
-> 对应的，在创作者学院的文章里，可以插入 iframe ，而 iframe 能立即访问 creator 或 gandi ，形成了漏洞链，用户仅需点开文章，就会暴露在风险之中。  
+> 对应的，在创作者学院的文章里，可以插入 iframe ，而 iframe 能立即访问 /creator 或 /gandi ，形成了漏洞链，用户仅需点开文章，就会暴露在风险之中。  
 > 
 > 当然了，创作页执行上述操作，并不需要使用第三方扩展，只需要使用 CCWData 的代码注入漏洞，配合 “当计时器 > -1” 的帽子，就可以在浏览器访问链接后立即执行任意代码。
 
@@ -333,15 +352,7 @@ Content-Security-Policy: script-src 'none'
 
 状态：⚠️未修复  
 
-您可能已经注意到，上述的部分攻击形式可以借助创作者学院嵌入iframe，形成漏洞链，受害者在已登录的状态下，点击文章就会中招。  
-
-这其中有两种形式：
-
-- 基于 `www.ccw.site/gandi` 或 `www.ccw.site/creator`  
-  这是比较常见的方式，缺点是需要等待加载编辑器完成才会执行恶意代码，给受害者几秒钟的反应时间。  
-
-- 基于 m.ccw.site 加载 SVG  
-  只要 SVG 加载成功，恶意代码就会立即执行，受害者几乎没有反应时间。  
+部分攻击形式可以借助创作者学院嵌入iframe，形成漏洞链，受害者在已登录的状态下，点击文章就会中招。  
 
 创作者学院的前端编辑器并不能直接插入任意站点，例如尝试插入 `https://example.com` ，它会提示：暂时只支持bilibili和西瓜视频以及站内链接  
 
@@ -400,7 +411,7 @@ var r, c, a = n(23891), i = "2023-07-20 10:30:00", s = "64b8c81969db2747de4502be
 仅在编辑器里插入的时候会校验，但查看文章的时候加载iframe前不会校验。  
 我不知道服务器会不会校验。  
 
-幸运的是，在创作者学院发布这种含有恶意 iframe 的文章，如果造成了恐慌，文章可能会在一天之内被下架。  
+幸运的是，在创作者学院发布这种含有 iframe 的文章，如果造成了恐慌，文章可能会在一天之内被下架，此后作者发文章可能再也不会自动过审。  
 
 ---
 
@@ -560,6 +571,26 @@ Application error: a client-side exception has occurred (see the browser console
 
 ---
 
+## 个人主页或动态页面注入style
+
+状态：✅已修复
+
+该漏洞的出现是因为渲染简介时没有移除 html 元素的 `style` 和 `class` 属性，导致用户可以进行以下操作：
+- 用 个人简介 给 个人主页 注入样式
+- 用 代表作 给 个人主页 注入样式
+- 用 作品简介 给 动态 注入样式
+
+注入了样式的元素可以覆盖整个页面。  
+
+该漏洞被广泛用于恶搞或装饰。
+
+该漏洞不能用于执行任意代码，所以不能零点击盗号，但理论上可以诱导用户点击 `<a>` 标签打开能执行任意代码的页面。
+
+参考：
+- [篡改猴CCW解决自我介绍恶意CSS遮罩](https://learn.ccw.site/article/c9826e86-50f8-4a30-b081-b38ae5c8c626)  
+
+---
+
 ## BBcode代码注入漏洞
 
 状态：✅已修复
@@ -603,6 +634,22 @@ Application error: a client-side exception has occurred (see the browser console
 ## 来自官方程序员的认可
 
 ![11](img/11.png)
+
+---
+
+## 特别感谢
+
+- 孟夫子驾到 (BenPaoDeXiaoZhi)  
+  [Github](https://github.com/BenPaoDeXiaoZhi) | [CCW](https://www.ccw.site/student/63c2807d669fa967f17f5559)  
+  提供高质量内容参考。  
+
+- voyage200 (jexjws)
+  [Github](https://github.com/jexjws) | [CCW](https://www.ccw.site/student/64ba849b314bb1118e101130)  
+  帮助作者破解CCW的A和B请求头签名机制。  
+
+- HCN (sylarhcn) (CCW官方程序员)  
+  [Github](https://github.com/sylarhcn) | [CCW](https://www.ccw.site/student/5d47fec31c94e579b89cd259)  
+  对本文表示认可。  
 
 ---
 
@@ -660,6 +707,9 @@ Application error: a client-side exception has occurred (see the browser console
 
 - [[重要通告]保护账号安全，做对这几件事...](https://learn.ccw.site/article/6af308a5-cb78-465c-bb1e-572c48f0fc5e)  
   [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 2025-12-08 17:09  
+
+- [篡改猴CCW解决自我介绍恶意CSS遮罩](https://learn.ccw.site/article/c9826e86-50f8-4a30-b081-b38ae5c8c626)  
+  [半岛的蒟蒻bddjr](https://www.ccw.site/student/60816ba55659e776ec2d3be9) 2025-07-15 21:01  
 
 - [BBcode教程](https://learn.ccw.site/post/7d129e01-e30a-4d88-92d2-320b555ed0f5)  
   [白猫](https://www.ccw.site/student/6173f57f48cf8f4796fc860e) 2023-07-18
