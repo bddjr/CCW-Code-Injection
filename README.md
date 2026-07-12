@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月12日 22:13
+更新时间：北京时间 2026年7月12日 22:55
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -633,6 +633,12 @@ Application error: a client-side exception has occurred (see the browser console
 - HCN (sylarhcn) (CCW官方程序员)  
   [Github](https://github.com/sylarhcn) | [CCW](https://www.ccw.site/student/5d47fec31c94e579b89cd259)  
   对本文表示认可。  
+
+---
+
+## 版权
+
+详见 [LICENSE.md](LICENSE.md)
 
 ---
 
