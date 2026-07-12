@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月12日 21:50
+更新时间：北京时间 2026年7月12日 22:13
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -309,6 +309,7 @@ Content-Security-Policy: script-src 'none'
 
 以前，这些页面在加载项目的时候会立即加载并执行扩展脚本，不会经过用户同意，因此漏洞仍然明显。
 
+> 【这部分灰色的文字可能是过时的内容】  
 > 攻击者可以利用 /creator 或 /gandi 会立即加载作品的特性，在加载作品的时候执行第三方扩展脚本。  
 > 用户只需要访问创作页的链接，就会将自己的账号暴露在风险之中。  
 > 
@@ -615,7 +616,7 @@ Application error: a client-side exception has occurred (see the browser console
 
 - 孟夫子驾到 (BenPaoDeXiaoZhi)  
   [Github](https://github.com/BenPaoDeXiaoZhi) | [CCW](https://www.ccw.site/student/63c2807d669fa967f17f5559)  
-  提供高质量内容参考，并且主动以提交issue的方式向本文以补充更多信息。  
+  提供高质量内容参考，并且主动以提交issue的方式向本文补充更多信息。  
 
 - XiaoChen003Hao (xiaochen004hao)  
   [Github](https://github.com/xiaochen004hao) | [CCW](https://www.ccw.site/student/643bb84051bc32279f0c3fa0)  
