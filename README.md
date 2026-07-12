@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月12日 21:19
+更新时间：北京时间 2026年7月12日 21:44
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -84,6 +84,8 @@
 状态：未知
 
 攻击者成功在受害者的环境注入恶意代码后，会将个人资料的“学校”字段修改成很长的字符串，导致用户个人设置的个人资料时，页面无响应（卡死），用户难以使用常规路径修改自己的昵称和密码。
+
+参考: [论被不想上学“盗号”后为什么打不开个人设置](https://learn.ccw.site/article/8f2dd50e-f564-4447-8306-2536c43d8522)  
 
 不过，受害者可以按照 [“账号被黑了怎么办？”](#账号被黑了怎么办) 的提示操作，以解决个人资料页面卡死的问题。
 
@@ -180,35 +182,7 @@ await new Promise((resolve, reject) => {
 ```
 
 > [!NOTE]  
-> 已知该漏洞被 “不想上学” 利用过。  
-> 部分账号疑似被 “不想上学” 盗取，并被用于发布评论和恶意扩展，已知包括：
-> 
-> - [沙雕的初小白](https://www.ccw.site/student/6700b4333feba73009833eb5)  
->   共创世界 ID 265003222  
->   处罚：已被封禁，然后于2026年5月11日15时左右解除封禁，随后的 3 个小时内再次被封禁。  
->   封禁时间：2026年5月8日 14:55:59  
->   解封时间：2026年5月18日 17:10:52  
-> 
-> - [生气的Charles0](https://www.ccw.site/student/66b75da6aa7ba3081f3f839f)  
->   共创世界 ID 263014899  
->   处罚：已被封禁  
->   封禁时间：2026年5月5日 23:42:24  
->   解封时间：2029年1月28日 23:44:21
-> 
-> 以下证据截图自 [文章](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef) 的评论区和 “不想上学” 发的链接。  
-> 
-> ![6](img/6.png)  
-> ![7](img/7.png)  
->
-> 以下评论截图自 [鸭鸭院长](https://www.ccw.site/student/61039f14fffbe5461b880787) 的主页评论区。  
->
-> ![8](img/8.png)  
-> ![9](img/9.png)  
-
-> [!NOTE]  
-> 官方回复：  
->
-> ![10](img/10.png)  
+> 已知该漏洞被 “不想上学” 利用过，详见 [自动填充账号密码-不想上学.md](自动填充账号密码-不想上学.md)  
 
 ---
 
@@ -641,11 +615,19 @@ Application error: a client-side exception has occurred (see the browser console
 
 - 孟夫子驾到 (BenPaoDeXiaoZhi)  
   [Github](https://github.com/BenPaoDeXiaoZhi) | [CCW](https://www.ccw.site/student/63c2807d669fa967f17f5559)  
-  提供高质量内容参考。  
+  提供高质量内容参考，并且主动以提交issue的方式向本文以补充更多信息。  
 
-- voyage200 (jexjws)
+- XiaoChen003Hao (xiaochen004hao)  
+  [Github](https://github.com/xiaochen004hao) | [CCW](https://www.ccw.site/student/643bb84051bc32279f0c3fa0)  
+  在“RenderTheWorld”扩展被攻击者覆盖成恶意代码后，发布 [文章](https://learn.ccw.site/article/8f2dd50e-f564-4447-8306-2536c43d8522) 说明“打不开个人设置”的原因，为本文提供了重要线索。  
+
+- voyage200 (jexjws)  
   [Github](https://github.com/jexjws) | [CCW](https://www.ccw.site/student/64ba849b314bb1118e101130)  
   帮助作者破解CCW的A和B请求头签名机制。  
+
+- Joy_Ful (JoyFul721)  
+  [Github](https://github.com/JoyFul721) | [CCW](https://www.ccw.site/student/63a2ed71e9bc643fdde156b2)  
+  不小心运行了被攻击者覆盖过的“RenderTheWorld”扩展导致被盗号后，主动向本文作者求救，为作者提供了重要线索。  
 
 - HCN (sylarhcn) (CCW官方程序员)  
   [Github](https://github.com/sylarhcn) | [CCW](https://www.ccw.site/student/5d47fec31c94e579b89cd259)  
@@ -672,6 +654,9 @@ Application error: a client-side exception has occurred (see the browser console
 
 - [ccw扩展覆写事件分析，此漏洞其实早就被发现了？](https://learn.ccw.site/article/77be3d26-dbf6-4d82-b323-5fc06033c600)  
   [孟夫子驾到](https://www.ccw.site/student/63c2807d669fa967f17f5559) 2026-05-31 17:53
+
+- [论被不想上学“盗号”后为什么打不开个人设置](https://learn.ccw.site/article/8f2dd50e-f564-4447-8306-2536c43d8522)  
+  [XiaoChen003Hao](https://www.ccw.site/student/643bb84051bc32279f0c3fa0) 2026-05-30 19:21
 
 - [CCW 社区安全 Q&A](https://learn.ccw.site/article/51501436-87d5-4d4b-976e-2d00bbc50e9a)  
   [Chen-Jin](https://www.ccw.site/student/692538ef86bbc77f84e3b259) 2026-05-10 02:45  
