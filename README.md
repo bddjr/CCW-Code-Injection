@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月12日 10:56
+更新时间：北京时间 2026年7月12日 12:23
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -299,6 +299,14 @@ Content-Security-Policy: script-src 'none'
 
 现在在加载扩展之前就会警告，只有用户点击 “继续运行” 才会运行扩展的脚本，降低了安全风险。  
 
+### player页面
+
+该页面用于手机版，不会弹出扩展警告，可用于立即执行任意代码。
+
+漏洞演示: https://www.ccw.site/player/6a5309e5d4bf1642fe07b93c?autorun=1&fullscreen=false
+
+信息来源: [#1](https://github.com/bddjr/CCW-Code-Injection/issues/1)  
+
 ### 其它页面
 
 其它页面例如：
@@ -499,6 +507,9 @@ POST https://community-web.ccw.site/students/self/detail
 - 该账号实名认证的全名的长度
 - 该账号实名认证的身份证的前两位和后两位
 
+在官方尝试修复之前，该接口甚至可以获取：  
+- 该账号实名认证的全名
+
 ---
 
 ## 创作者学院的localStorage
@@ -507,12 +518,7 @@ POST https://community-web.ccw.site/students/self/detail
 
 iframe 在跨域的时候可能不能获取 `window.parent` 对象，所以暂不清楚该特性能否被攻击者利用。
 
-创作者学院会在 `localStorage['persist:root']` 里保存最近查看文章时使用的账号的敏感信息，包括但不限于：
-- 该账号绑定的手机号
-- 该账号绑定 QQ 时的 QQ 昵称
-- 该账号实名认证的姓氏
-- 该账号实名认证的全名的长度
-- 该账号实名认证的身份证的前两位和后两位
+创作者学院会在 `localStorage['persist:root']` 里保存最近查看文章时使用的账号的敏感信息，参考 [个人信息接口](#个人信息接口) 。
 
 即使用户已经退出登录，这里也会继续保存这些内容。
 
