@@ -2,7 +2,7 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月16日 21:26
+更新时间：北京时间 2026年7月18日 13:40
 
 该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -296,11 +296,19 @@ Content-Security-Policy: script-src 'none'
 
 ### player页面
 
-该页面用于手机版，不会弹出扩展警告，可用于立即执行任意代码。
+该页面用于手机版，不会弹出扩展警告，可用于零点击立即执行任意代码。
 
 漏洞演示: https://www.ccw.site/player/6a5309e5d4bf1642fe07b93c?autorun=1&fullscreen=false
 
 信息来源: [#1](https://github.com/bddjr/CCW-Code-Injection/issues/1)  
+
+### PlayerWithInRouter页面
+
+该页面用于展示GameJam战队投稿作品，会被嵌入到GameJam战队页面。
+
+该页面需要手动点击“立即运行”，但运行后没有扩展警告弹窗。
+
+漏洞演示: https://www.ccw.site/PlayerWithInRouter/6a5309e5d4bf1642fe07b93c?projectLink=https://m.ccw.site/user_projects_sb3/199431844/18847bed1e8a633032b955cf6f48b07e.sb3&simple=123
 
 ### embed页面
 
