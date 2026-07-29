@@ -2,9 +2,11 @@
 
 记录共创世界的代码注入漏洞（任意代码执行漏洞）、可能的盗号方式和防护方式建议。
 
-更新时间：北京时间 2026年7月18日 13:55
+若无特别标注，则本文提到的时间所属时区为北京时间（UTC+08:00）。
 
-该仓库创建于北京时间 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
+更新时间：2026年7月29日 18:04
+
+该仓库创建于 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
 > [!WARNING]  
 > **仅供学习研究用途，请勿用于网络攻击，违者后果自负！！！**  
@@ -357,13 +359,17 @@ var r, c, a = n(23891), i = "2023-07-20 10:30:00", s = "64b8c81969db2747de4502be
 
 ## CCWData
 
-状态：✅已修复  
+状态：⚠️未完全修复  
 
-Gandi云数据扩展 (CCWData) 已于北京时间 2026年5月21日 16:50:39 修复前端代码注入漏洞。
+Gandi云数据扩展 (CCWData) 的旧版本存在前端代码注入漏洞（任意代码执行漏洞）。
 
-参考js文件 [20260521.scratch3_ccw_data.9ff72c43.prettyprint.js](20260521.scratch3_ccw_data.9ff72c43.prettyprint.js)
+2026年5月21日 16:50:39 发布的新版扩展已修复该漏洞，多数页面会加载已修复漏洞的版本，但仍有少量页面会加载未修复该漏洞的旧版扩展。
 
-[查看旧版逻辑](./ccwdata-before-20260521-165039.md)  
+`/scratch-player` 页面用于分享未发布的作品，但该页面加载的Gandi云数据扩展是早于 2026年3月9日 的版本，所以该漏洞未完全修复。  
+
+[查看 2026年3月9日 之前的逻辑](./before-20260309.md)  
+
+[查看 2026年5月21日 之前的逻辑](./ccwdata-before-20260521-165039.md)  
 
 修复后，相关积木会直接调用新版的积木。相关代码如下  
 
@@ -390,6 +396,8 @@ Gandi云数据扩展 (CCWData) 已于北京时间 2026年5月21日 16:50:39 修�
     }
 }
 ```
+
+js文件 [20260521.scratch3_ccw_data.9ff72c43.prettyprint.js](20260521.scratch3_ccw_data.9ff72c43.prettyprint.js)
 
 ---
 
@@ -668,7 +676,7 @@ Application error: a client-side exception has occurred (see the browser console
   [纆默黑狗斯特-mmhgst](https://www.ccw.site/student/60cd5619fa5edd0db169e2b8) 2026-05-05 19:15  
 
 - [Every version of Scratch is vulnerable to arbitrary code execution](https://muffin.ink/blog/scratch-vulnerability-disclosure/)  
-  [muffin.ink](https://muffin.ink) 2026-04-23  
+  [muffin.ink](https://muffin.ink) 2026-04-23 (时区：UTC-05:00) 
 
 - [【社区公告】关于“账号安全”的通知](https://learn.ccw.site/article/998d3e07-7210-4b5a-ab6d-64ac84e3caef)  
   [共创世界产品汪](https://www.ccw.site/student/6008f86de6894d53dd63749f) 2026-04-13 19:20  
