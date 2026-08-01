@@ -4,7 +4,7 @@
 
 若无特别标注，则本文提到的时间所属时区为北京时间（UTC+08:00）。
 
-更新时间：2026年8月1日 20:03
+更新时间：2026年8月1日 20:57
 
 该仓库创建于 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -500,10 +500,6 @@ POST https://community-web.ccw.site/students/self/detail
 ---
 
 ## 创作者学院的localStorage
-
-创作者学院的文章不能在不借助 iframe 的情况下注入恶意代码，而且 iframe 引用的网址必须跨域，例如跨域到 www.ccw.site 或 m.ccw.site 。
-
-iframe 在跨域的时候可能不能获取 `window.parent` 对象，所以暂不清楚该特性能否被攻击者利用。
 
 创作者学院会在 `localStorage['persist:root']` 里保存最近查看文章时使用的账号的敏感信息，参考 [个人信息接口](#个人信息接口) 。
 
