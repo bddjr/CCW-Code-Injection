@@ -10,10 +10,7 @@ await fetch("https:/\/community-web.ccw.site/health/check", {
   return r.json()
 }).then(j => {
   if (j.status != 200) throw Error(j.msg);
-  const hmacKey = j.body
-    .map(({ traceId }) => traceId[parseInt(traceId[0], 16) + 1])
-    .reverse()
-    .join("")
+  const hmacKey = j.body.reduce((p, v) => v.traceId[parseInt(v.traceId[0], 16) + 1] + p, '')
     , body = `{"school":""}`
     , b = Date["now"]().toString()
     , a = md5("ccw" + body + b, hmacKey);

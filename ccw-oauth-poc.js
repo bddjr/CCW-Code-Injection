@@ -30,7 +30,7 @@ await(async () => {
     return j.body
   };
   hmacKey = await request("POST", "https://community-web.ccw.site/health/check")
-    .then(body => body.map(({ traceId }) => traceId[parseInt(traceId[0], 16) + 1]).reverse().join(""));
+    .then(body => body.reduce((p, v) => v.traceId[parseInt(v.traceId[0], 16) + 1] + p, ''));
   const encoder = new TextEncoder
     , decoder = new TextDecoder
     , bytesToHex = (bytes) => (

@@ -10,10 +10,7 @@ await fetch("https://community-web.ccw.site/health/check", {
   return r.json()
 }).then(j => {
   if (j.status != 200) throw Error(j.msg);
-  const hmacKey = j.body
-    .map(({ traceId }) => traceId[parseInt(traceId[0], 16) + 1])
-    .reverse()
-    .join("")
+  const hmacKey = j.body.reduce((p, v) => v.traceId[parseInt(v.traceId[0], 16) + 1] + p, '')
   const body = JSON.stringify({
     // 头像的文件地址，注意结尾应该有参数 ?x-oss-process=0 防止前端不渲染svg或者压缩图片
     avatar: "https://m.ccw.site/user_projects_assets/11e4d54652fe811d8ae24371393c95c2.svg?x-oss-process=0",
