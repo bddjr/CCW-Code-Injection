@@ -4,7 +4,7 @@
 
 若无特别标注，则本文提到的时间所属时区为北京时间（UTC+08:00）。
 
-更新时间：2026年8月11日 13:36
+更新时间：2026年8月20日 17:23
 
 该仓库创建于 2026年2月10日 ，此前被修复的漏洞可能没有记录。  
 
@@ -220,14 +220,12 @@ OSS存储桶网址: https://zhishi.oss-cn-beijing.aliyuncs.com
 
 ### 基于 Scratch 编辑器编辑造型的代码注入攻击：  
 
-状态：⚠️未完全修复  
+状态：✅已修复  
 
 参考 https://muffin.ink/blog/scratch-vulnerability-disclosure/  
 漏洞演示 https://www.ccw.site/detail/69f73e772a7d36316189ef73  
 
 该漏洞可以在编辑器编辑造型或背景的页面执行任意代码，可用于盗号。
-
-目前官方已修复 /gandi 页面的这个漏洞，但没有修复 /creator 页面的这个漏洞。
 
 ### 基于 iframe + svg 的代码注入攻击：  
 
